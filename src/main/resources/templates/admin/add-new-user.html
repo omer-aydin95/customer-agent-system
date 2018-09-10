@@ -1,0 +1,245 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Add New User</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/themify-icons.css">
+  <link rel="stylesheet" href="/assets/css/flag-icon.min.css">
+  <link rel="stylesheet" href="/assets/css/cs-skin-elastic.css">
+  <!-- <link rel="stylesheet" href="assets/css/bootstrap-select.less"> -->
+  <link rel="stylesheet" href="/assets/scss/style.css">
+  <link href="/css/main.css" rel="stylesheet">
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+</head>
+<body>
+<!-- Left Panel -->
+
+<aside th:replace="shared/navbar"></aside>
+
+<!-- Left Panel -->
+
+<!-- Right Panel -->
+
+<div id="right-panel" class="right-panel">
+
+  <!-- Header-->
+  <header th:replace="shared/header"></header>
+  <!-- Header-->
+
+  <div class="breadcrumbs">
+    <div class="col-sm-4">
+      <div class="page-header float-left">
+        <div class="page-title">
+          <h1>Add New User</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content mt-3">
+
+    <div th:switch="${saveStatus}">
+      <div th:case="'NULL'"></div>
+      <div th:case="'SUCCESSFUL'">
+        <div class="alert alert-success" role="alert">
+          <strong>Successful!</strong> The user has been saved successfully!
+        </div>
+      </div>
+      <div th:case="'FAILED'">
+        <div class="alert alert-danger" role="alert">
+          <strong>Failed!</strong> Sorry something went wrong! The user could not saved!
+        </div>
+      </div>
+    </div>
+
+    <form id="newUserForm" enctype="multipart/form-data" method="post">
+      <div class="row">
+        <div class="col-xs-6 col-sm-6">
+          <div class="card">
+            <div class="card-header">
+              <strong><i class="fa fa-user-plus"></i> Personal Information</strong>
+            </div>
+            <div class="card-body card-block">
+              <div class="form-group">
+                <label class=" form-control-label">Firstname</label>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                  <input type="text" id="userFirstname" autocomplete="off" name="userFirstname" class="form-control">
+                </div>
+                <i id="errorFirstname" style="color: red;"></i>
+                <small class="form-text text-muted">ex. John</small>
+              </div>
+              <div class="form-group">
+                <label class=" form-control-label">Lastname</label>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                  <input type="text" id="userLastname" autocomplete="off" name="userLastname" class="form-control">
+                </div>
+                <i id="errorLastname" style="color: red;"></i>
+                <small class="form-text text-muted">ex. Doe</small>
+              </div>
+              <div class="form-group">
+                <label class=" form-control-label">Email</label>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                  <input type="text" id="userEmail" autocomplete="off" name="userEmail" class="form-control">
+                </div>
+                <i id="errorEmail" style="color: red;"></i>
+                <small class="form-text text-muted">ex. name.surname@business.com</small>
+              </div>
+              <div class="form-group">
+                <label class=" form-control-label">Gender</label>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-transgender"></i></div>
+                  <select name="userGender" id="userGender" class="form-control">
+                    <option value="NULL">Please select</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                  </select>
+                </div>
+                <i id="errorGender" style="color: red;"></i>
+                <small class="form-text text-muted">ex. Male / Female</small>
+              </div>
+              <div class="form-group">
+                <label class=" form-control-label">Profile Picture</label>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-picture-o"></i></div>
+                  <div class="file-upload">
+                    <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
+
+                    <div class="image-upload-wrap">
+                      <input class="file-upload-input" id="profilePicture" name="profilePicture" type='file' onchange="readURL(this);" accept="image/*"/>
+                      <div class="drag-text">
+                        <h5>Drag and drop a file or select add Image</h5>
+                      </div>
+                    </div>
+                    <div class="file-upload-content">
+                      <img class="file-upload-image" src="#" alt="User Profile Picture">
+                      <div class="image-title-wrap">
+                        <span class="image-title">Uploaded Image</span>
+                      </div>
+                      <div class="image-title-wrap">
+                        <button type="button" onclick="removeUpload()" class="remove-image">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <small class="form-text text-muted">Please select a picture.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-xs-6 col-sm-6">
+          <div class="card">
+            <div class="card-header">
+              <strong><i class="fa fa-dashboard"></i> System Information</strong>
+            </div>
+            <div class="card-body card-block">
+              <div class="form-group">
+                <label class="form-control-label">User ID</label>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-id-badge"></i></div>
+                  <input type="text" id="userID" th:value="${userID}" name="userID" readonly class="form-control">
+                </div>
+                <i id="errorID" style="color: red;"></i>
+                <small class="form-text text-muted">The ID has been generated automatically, please do not touch.</small>
+              </div>
+              <div class="form-group">
+                <label class=" form-control-label">User Role</label>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-shield"></i></div>
+                  <select name="userRole" id="userRole" class="form-control">
+                    <option value="NULL">Please select</option>
+                    <option value="AGENT">Agent</option>
+                    <option value="ADMIN">Admin</option>
+                  </select>
+                </div>
+                <i id="errorRole" style="color: red;"></i>
+                <small class="form-text text-muted">ex. Agent / Admin</small>
+              </div>
+              <div class="form-group">
+                <label class=" form-control-label">Username</label>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
+                  <input type="text" id="username" autocomplete="off" name="username" class="form-control">
+                </div>
+                <i id="errorUsername" style="color: red;"></i>
+                <small class="form-text text-muted">ex. name.surname</small>
+              </div>
+              <div class="form-group">
+                <label class=" form-control-label">Password</label>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                  <input type="password" id="password" name="password" class="form-control">
+                </div>
+                <i id="errorPassword" style="color: red;"></i>
+                <small class="form-text text-muted">Please create min 5 character password.</small>
+              </div>
+              <div class="form-group">
+                <div class="input-group">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group">
+                  <button type="button" onclick="validateNewUserAndSubmit()" style="border-radius: 5px;" id="saveNewUser" name="saveNewUser" class="btn btn-primary form-control"><i class="fa fa-save"></i> Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div><!-- .content -->
+
+
+</div><!-- /#right-panel -->
+
+<!-- Right Panel -->
+</body>
+<script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
+<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="/js/app.js"></script>
+
+<script>
+  window.history.pushState('', '', '/admin/add-new-user');
+
+  window.setTimeout(function()
+  {
+    $(".alert").fadeTo(500, 0).slideUp(500, function()
+    {
+      $(this).remove();
+    });
+  }, 3000);
+</script>
+
+<script src="/assets/js/vendor/jquery-2.1.4.min.js"></script>
+<script src="/assets/js/lib/chart-js/Chart.bundle.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+<script src="/assets/js/dashboard.js"></script>
+<script src="/assets/js/widgets.js"></script>
+</html>

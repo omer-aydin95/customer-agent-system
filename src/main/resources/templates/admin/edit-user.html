@@ -1,0 +1,310 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Edit User</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/themify-icons.css">
+  <link rel="stylesheet" href="/assets/css/flag-icon.min.css">
+  <link rel="stylesheet" href="/assets/css/cs-skin-elastic.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+  <!-- <link rel="stylesheet" href="assets/css/bootstrap-select.less"> -->
+  <link rel="stylesheet" href="/assets/scss/style.css">
+  <link href="/css/main.css" rel="stylesheet">
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+</head>
+<body>
+<!-- Left Panel -->
+
+<aside th:replace="shared/navbar"></aside>
+
+<!-- Left Panel -->
+
+<!-- Right Panel -->
+
+<div id="right-panel" class="right-panel">
+
+  <!-- Header-->
+  <header th:replace="shared/header"></header>
+  <!-- Header-->
+
+  <div class="breadcrumbs">
+    <div class="col-sm-4">
+      <div class="page-header float-left">
+        <div class="page-title">
+          <h1>Edit User</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content mt-3">
+
+    <div th:switch="${saveStatus}">
+      <div th:case="'NULL'"></div>
+      <div th:case="'SUCCESSFUL'">
+        <div class="alert alert-success" role="alert">
+          <strong>Successful!</strong> The user has been saved successfully!
+        </div>
+      </div>
+      <div th:case="'FAILED'">
+        <div class="alert alert-danger" role="alert">
+          <strong>Failed!</strong> Sorry something went wrong! The user could not saved!
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <strong class="card-title mb-3">User Profile Detail</strong>
+        </div>
+        <div class="card-body">
+          <div class="mx-auto d-block">
+            <img class="rounded-circle mx-auto d-block" th:src="${detailUser.getProfilePicture()}"
+                 alt="User Profile Picture">
+            <h5 class="text-sm-center mt-2 mb-1"
+                th:text="${detailUser.getUserFirstname() + ' ' + detailUser.getUserLastname()}"></h5>
+            <hr>
+            <div class="row">
+              <div class="col-2"><i class="fa fa-envelope"></i></div>
+              <div class="col-10" th:text="${detailUser.getUserEmail()}"></div>
+              <div class="col-2"><i class="fa fa-shield"></i></div>
+              <div class="col-10" th:text="${detailUser.getUserRole()}"></div>
+              <div class="col-2"><i class="fa fa-transgender"></i></div>
+              <div class="col-10" th:text="${detailUser.getGender()}"></div>
+              <div class="col-2"><i class="fa fa-id-badge"></i></div>
+              <div class="col-10" th:text="${detailUser.getUserID()}"></div>
+              <div class="col-2"><i class="fa fa-user"></i></div>
+              <div class="col-10" th:text="${detailUser.getUsername()}"></div>
+              <div class="col-2"><i class="fa fa-calendar"></i></div>
+              <div class="col-10" th:text="${detailUser.getCreatedAt()}"></div>
+              <div class="col-2"><i class="fa fa-sign-in"></i></div>
+              <div class="col-10" th:switch="${detailUser.getUserStatus()}">
+                <span class="badge badge-warning" th:case="'LOGOUT'">LOGOUT</span>
+                <span class="badge badge-danger" th:case="'BUSY'">BUSY</span>
+                <span class="badge badge-success" th:case="'AVAILABLE'">AVAILABLE</span>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="card-text text-sm-center">
+            <form id="deleteUserForm">
+              <div class="form-group">
+                <a th:href="'/admin/user/detail/' + ${detailUser.getUserID()}"
+                   class="btn btn-primary form-control" data-toggle="tooltip"
+                   title="Show User Profile Detail" style="border-radius: 5px;"><i class="fa fa-dashboard"></i> Profile
+                  Detail</a>
+              </div>
+              <div class="form-group">
+                <a th:href="'/admin/user/reset-password/' + ${detailUser.getUserID()}"
+                   class="btn btn-primary form-control" data-toggle="tooltip"
+                   title="Reset User Password" style="border-radius: 5px;"><i class="fa fa-key"></i> Reset
+                  Password</a>
+              </div>
+              <div th:if="${detailUser.getUserID()} != ${user.getUserID()}" class="form-group">
+                <button data-toggle="modal" data-target="#staticModal" style="border-radius: 5px;"
+                        class="btn btn-danger form-control">
+                  <i class="fa fa-times"></i> Delete
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="staticModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel"
+         aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticModalLabel">Static Modal</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Did you really want to delete the user <b
+                    th:text="${detailUser.getUserFirstname() + ' ' + detailUser.getUserLastname()}"></b>
+            </p>
+            <div id="deleteAlert" class="alert alert-success" style="visibility: hidden;" role="alert">
+              The user <b th:text="${detailUser.getUserFirstname() + ' ' + detailUser.getUserLastname()}"></b>
+              has been deleted successfully! The page will be closed in 5 seconds!
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" style="border-radius: 5px;" data-dismiss="modal">Cancel
+            </button>
+            <button type="button" class="btn btn-danger" style="border-radius: 5px;" id="deleteUser" name="deleteUser">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form id="editUserForm" enctype="multipart/form-data" method="post" action="/admin/user/edit">
+      <div class="col-lg-9 col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <strong><i class="fa fa-edit"></i> Edit User Information</strong>
+          </div>
+          <div class="card-body card-block">
+            <div class="form-group">
+              <label class="form-control-label">User ID</label>
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-id-badge"></i></div>
+                <input type="text" id="userID" th:value="${detailUser.getUserID()}" name="userID" readonly class="form-control">
+              </div>
+              <i id="errorID" style="color: red;"></i>
+              <small class="form-text text-muted">The ID is already related with the user so please do not touch.</small>
+            </div>
+            <div class="form-group">
+              <label class=" form-control-label">Firstname</label>
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                <input type="text" id="userFirstname" th:value="${detailUser.getUserFirstname()}" autocomplete="off" name="userFirstname" class="form-control">
+              </div>
+              <i id="errorFirstname" style="color: red;"></i>
+              <small class="form-text text-muted">ex. John</small>
+            </div>
+            <div class="form-group">
+              <label class=" form-control-label">Lastname</label>
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                <input type="text" id="userLastname" th:value="${detailUser.getUserLastname()}" autocomplete="off" name="userLastname" class="form-control">
+              </div>
+              <i id="errorLastname" style="color: red;"></i>
+              <small class="form-text text-muted">ex. Doe</small>
+            </div>
+            <div class="form-group">
+              <label class=" form-control-label">Email</label>
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                <input type="text" id="userEmail" th:value="${detailUser.getUserEmail()}" autocomplete="off" name="userEmail" class="form-control">
+              </div>
+              <i id="errorEmail" style="color: red;"></i>
+              <small class="form-text text-muted">ex. name.surname@business.com</small>
+            </div>
+            <div class="form-group">
+              <label class=" form-control-label">Gender</label>
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-transgender"></i></div>
+                <select name="userGender" id="userGender" class="form-control">
+                  <option value="NULL" th:selected="${detailUser.getGender() == 'NULL'}">Please select</option>
+                  <option value="MALE" th:selected="${detailUser.getGender() == 'MALE'}">Male</option>
+                  <option value="FEMALE" th:selected="${detailUser.getGender() == 'FEMALE'}">Female</option>
+                </select>
+              </div>
+              <i id="errorGender" style="color: red;"></i>
+              <small class="form-text text-muted">ex. Male / Female</small>
+            </div>
+            <div class="form-group">
+              <label class=" form-control-label">User Role</label>
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-shield"></i></div>
+                <select name="userRole" id="userRole" class="form-control">
+                  <option value="NULL" th:selected="${detailUser.getUserRole() == 'NULL'}">Please select</option>
+                  <option value="AGENT" th:selected="${detailUser.getUserRole() == 'AGENT'}">Agent</option>
+                  <option value="ADMIN" th:selected="${detailUser.getUserRole() == 'ADMIN'}">Admin</option>
+                </select>
+              </div>
+              <i id="errorRole" style="color: red;"></i>
+              <small class="form-text text-muted">ex. Agent / Admin</small>
+            </div>
+            <div class="form-group">
+              <label class=" form-control-label">Username</label>
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
+                <input type="text" id="username" th:value="${detailUser.getUsername()}" autocomplete="off" name="username" class="form-control">
+              </div>
+              <i id="errorUsername" style="color: red;"></i>
+              <small class="form-text text-muted">ex. name.surname</small>
+            </div>
+            <div class="form-group">
+              <label class=" form-control-label">Profile Picture</label>
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-picture-o"></i></div>
+                <div class="file-upload">
+                  <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
+
+                  <div class="image-upload-wrap">
+                    <input class="file-upload-input" id="profilePicture" name="profilePicture" type='file' onchange="readURL(this);" accept="image/*"/>
+                    <div class="drag-text">
+                      <h5>Drag and drop a file or select add Image</h5>
+                    </div>
+                  </div>
+                  <div class="file-upload-content">
+                    <img class="file-upload-image" src="#" alt="User Profile Picture">
+                    <div class="image-title-wrap">
+                      <span class="image-title">Uploaded Image</span>
+                    </div>
+                    <div class="image-title-wrap">
+                      <button type="button" onclick="removeUpload()" class="remove-image">Remove</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <small class="form-text text-muted">Please select a picture.</small>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <button type="button" onclick="validateEditUserAndSubmit()" style="border-radius: 5px; width: 200px;" id="saveEditUser" name="saveEditUser" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div> <!-- .content -->
+</div><!-- /#right-panel -->
+
+<!-- Right Panel -->
+</body>
+<script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
+<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="/js/app.js"></script>
+
+<script>
+  window.history.pushState('', '', '/admin/user/edit/' + document.getElementById('userID').value);
+
+  window.setTimeout(function()
+  {
+    $(".alert").fadeTo(500, 0).slideUp(500, function()
+    {
+      $(this).remove();
+    });
+  }, 3000);
+</script>
+
+<script src="/assets/js/vendor/jquery-2.1.4.min.js"></script>
+<script src="/assets/js/lib/chart-js/Chart.bundle.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+<script src="/assets/js/dashboard.js"></script>
+<script src="/assets/js/widgets.js"></script>
+</html>

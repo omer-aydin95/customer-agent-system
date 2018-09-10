@@ -1,0 +1,113 @@
+<header id="header" class="header" xmlns:th="http://www.w3.org/1999/xhtml">
+
+  <div class="header-menu">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="col-sm-7">
+          <a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
+          <div class="header-left">
+
+            <div th:switch="${user.getUserRole()}">
+              <div th:case="'ADMIN'" class="dropdown for-notification">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-bell"></i>
+                  <span class="count bg-danger" th:text="${openTickets.size()}" id="notificationNumber"></span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="notification">
+                  <!-- notifications come here -->
+                  <th:block th:each="ticket: ${openTickets}">
+                    <a class="dropdown-item media bg-flat-color-4" th:href="${'admin/tickets/' + ticket.getId()}">
+                      <i class="fa fa-exclamation"></i>
+                      <div th:switch="${ticket.getIssueType()}">
+                        <p th:case="'F_PASS'">Forgot Password</p>
+                        <p th:case="'OTHER'">Other</p>
+                      </div>
+                    </a>
+                  </th:block>
+                </div>
+              </div>
+
+              <div class="dropdown for-message">
+                <button class="btn btn-secondary dropdown-toggle" type="button"
+                        id="message"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-envelope"></i>
+                  <span class="count bg-primary" id="messageNumber1" th:text="${unreadMessages.size()}"></span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="message">
+                  <!-- messages come here -->
+                  <th:block th:each="message: ${unreadMessages}">
+                    <a class="dropdown-item media bg-flat-color-1" th:href="${'/' + user.getUserRole().toLowerCase().replace('ı', 'i') + '/message/send/' + message.getFromUser().getUserID()}">
+                      <span class="photo media-left"><img alt="User Profile Picture" th:src="${message.getFromUser().getProfilePicture()}"></span>
+                      <span class="message media-body">
+                    <span class="name float-left" th:text="${message.getFromUser().getUserFirstname() + ' ' + message.getFromUser().getUserLastname()}"></span>
+                    <span class="time float-right" th:text="${message.getSendDate()}"></span>
+                    <p th:text="${message.getMessageContent().substring(0, 36)}"></p>
+                  </span>
+                    </a>
+                  </th:block>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-sm-5">
+          <div class="user-area dropdown float-right" style="vertical-align: middle;">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <b style="line-height: 35px;" th:text="${user.getUserFirstname() + ' ' + user.getUserLastname()}" class="text-dark"></b>&nbsp;&nbsp;
+              <img class="user-avatar rounded-circle" th:src="${user.getProfilePicture()}" alt="User Profile Picture">
+            </a>
+
+            <div class="user-menu dropdown-menu" th:switch="${user.getUserRole()}">
+
+              <a th:case="'ADMIN'" class="nav-link dropdown-item" th:href="${'/' + user.getUserRole().toLowerCase().replace('ı', 'i') + '/user/detail/' + user.getUserID()}"><i class="fa fa-user"></i> Profile & Edit</a>
+
+              <a class="nav-link dropdown-item" th:href="${'/' + user.getUserRole().toLowerCase().replace('ı', 'i') + '/message/all'}"><i class="fa fa-envelope"></i> Messages <span th:text="${unreadMessages.size()}" id="messageNumber2" class="count bg-primary"></span></a>
+
+              <a class="nav-link dropdown-item" th:href="${'/' + user.getUserRole().toLowerCase().replace('ı', 'i') + '/tickets'}"><i class="fa fa-ticket"></i> Tickets <span th:text="${activeTickets.size()}" id="activeTicketNumber" class="count"></span></a>
+
+              <br>
+              <form id="formLogout" method="post" action="/logout">
+                <input type="submit" class="btn btn-danger form-control" id="logout" name="logout" style="border-radius: 10px;" value="Logout">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div th:switch="${user.getUserRole()}">
+      <div th:case="'AGENT'">
+        <div class="row">
+          <div class="content">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+              <h5 id="statusLabel" style="text-align: center;" th:text="${user.getUserStatus()}"></h5>
+            </div>
+            <div class="col-sm-3"></div>
+          </div>
+        </div>
+        <div class="form-group"></div>
+        <div class="row">
+          <div class="content">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4" style="text-align: center;">
+              <form id="statusForm">
+                <input type="submit" id="setAvailable" name="setAvailable" style="border-radius: 5px;" class="btn btn-primary" value="Available">
+                <input type="submit" id="setBusy" name="setBusy" class="btn btn-danger" style="width: 89px; border-radius: 5px;" value="Busy">
+              </form>
+            </div>
+            <div class="col-sm-4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+
+<br>
+<br>

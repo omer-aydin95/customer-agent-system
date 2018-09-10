@@ -1,0 +1,537 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Statistics for Conversations with Customer</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/themify-icons.css">
+  <link rel="stylesheet" href="/assets/css/flag-icon.min.css">
+  <link rel="stylesheet" href="/assets/css/cs-skin-elastic.css">
+  <link rel="stylesheet" href="/assets/css/lib/datatable/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+  <!-- <link rel="stylesheet" href="assets/css/bootstrap-select.less"> -->
+  <link rel="stylesheet" href="/assets/scss/style.css">
+  <link href="/css/main.css" rel="stylesheet">
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+</head>
+<body>
+<!-- Left Panel -->
+
+<aside th:replace="shared/navbar"></aside>
+
+<!-- Left Panel -->
+
+<!-- Right Panel -->
+
+<div id="right-panel" class="right-panel">
+
+  <!-- Header-->
+  <header th:replace="shared/header"></header>
+  <!-- Header-->
+
+  <div class="breadcrumbs">
+    <div class="col-sm-4">
+      <div class="page-header float-left">
+        <div class="page-title">
+          <h1>Statistics for Conversations with Customer</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content mt-3">
+
+    <div id="conversationAlert"></div>
+
+    <div th:switch="${user.getUserRole()}" th:case="'AGENT'" class="col-lg-3 col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <strong class="card-title mb-3">Profile Detail</strong>
+        </div>
+        <div class="card-body">
+          <div class="mx-auto d-block">
+            <img class="rounded-circle mx-auto d-block" th:src="${user.getProfilePicture()}"
+                 alt="User Profile Picture">
+            <h5 class="text-sm-center mt-2 mb-1"
+                th:text="${user.getUserFirstname() + ' ' + user.getUserLastname()}"></h5>
+            <hr>
+            <div class="row">
+              <div class="col-2"><i class="fa fa-envelope"></i></div>
+              <div class="col-10" th:text="${user.getUserEmail()}"></div>
+              <div class="col-2"><i class="fa fa-shield"></i></div>
+              <div class="col-10" th:text="${user.getUserRole()}"></div>
+              <div class="col-2"><i class="fa fa-transgender"></i></div>
+              <div class="col-10" th:text="${user.getGender()}"></div>
+              <div class="col-2"><i class="fa fa-id-badge"></i></div>
+              <div class="col-10" th:text="${user.getUserID()}"></div>
+              <div class="col-2"><i class="fa fa-user"></i></div>
+              <div class="col-10" th:text="${user.getUsername()}"></div>
+              <div class="col-2"><i class="fa fa-calendar"></i></div>
+              <div class="col-10" th:text="${user.getCreatedAt()}"></div>
+              <div class="col-2"><i class="fa fa-sign-in"></i></div>
+              <div class="col-10" th:switch="${user.getUserStatus()}">
+                <span class="badge badge-danger" th:case="'LOGOUT'">LOGOUT</span>
+                <span class="badge badge-danger" th:case="'BUSY'">BUSY</span>
+                <span class="badge badge-success" th:case="'AVAILABLE'">AVAILABLE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-flat-color-1">
+        <div class="card-body pb-0">
+          <div class="dropdown float-right">
+            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown">
+              <i class="fa fa-cog"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu-content">
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accTotal', 'acConvNumber')"
+                   style="cursor: pointer;">Total</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accToday', 'acConvNumber')"
+                   style="cursor: pointer;">Today</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accThisWeek', 'acConvNumber')"
+                   style="cursor: pointer;">This Week</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accThisMonth', 'acConvNumber')"
+                   style="cursor: pointer;">This Month</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accLast3Month', 'acConvNumber')"
+                   style="cursor: pointer;">Last 3 Months</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accLast6Month', 'acConvNumber')"
+                   style="cursor: pointer;">Last 6 Months</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accLast9Month', 'acConvNumber')"
+                   style="cursor: pointer;">Last 9 Months</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accThisYear', 'acConvNumber')"
+                   style="cursor: pointer;">This Year</a>
+              </div>
+            </div>
+          </div>
+          <h4 id="acConvLabel">Total:</h4>
+          <h4 class="mb-0">
+
+            <input type="hidden" readonly id="accTotal" th:value="${accStatistics[0]}">
+            <input type="hidden" readonly id="accToday" th:value="${accStatistics[1]}">
+            <input type="hidden" readonly id="accThisWeek" th:value="${accStatistics[2]}">
+            <input type="hidden" readonly id="accThisMonth" th:value="${accStatistics[3]}">
+            <input type="hidden" readonly id="accLast3Month" th:value="${accStatistics[4]}">
+            <input type="hidden" readonly id="accLast6Month" th:value="${accStatistics[5]}">
+            <input type="hidden" readonly id="accLast9Month" th:value="${accStatistics[6]}">
+            <input type="hidden" readonly id="accThisYear" th:value="${accStatistics[7]}">
+
+            <span class="count" id="acConvNumber" th:text="${accStatistics[0]}"></span>
+          </h4>
+          <br>
+          <p class="text-light">Conversations with Customer</p>
+
+        </div>
+
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-flat-color-2">
+        <div class="card-body pb-0">
+          <div class="dropdown float-right">
+            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown">
+              <i class="fa fa-cog"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu-content">
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacTotal', 'aaConvNumber')"
+                   style="cursor: pointer;">Total</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacToday', 'aaConvNumber')"
+                   style="cursor: pointer;">Today</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacThisWeek', 'aaConvNumber')"
+                   style="cursor: pointer;">This Week</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacThisMonth', 'aaConvNumber')"
+                   style="cursor: pointer;">This Month</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacLast3Month', 'aaConvNumber')"
+                   style="cursor: pointer;">Last 3 Months</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacLast6Month', 'aaConvNumber')"
+                   style="cursor: pointer;">Last 6 Months</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacLast9Month', 'aaConvNumber')"
+                   style="cursor: pointer;">Last 9 Months</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacThisYear', 'aaConvNumber')"
+                   style="cursor: pointer;">This Year</a>
+              </div>
+            </div>
+          </div>
+          <h4 id="aaConvLabel">Total:</h4>
+          <h4 class="mb-0">
+
+            <input type="hidden" readonly id="aacTotal" th:value="${aacStatistics[0]}">
+            <input type="hidden" readonly id="aacToday" th:value="${aacStatistics[1]}">
+            <input type="hidden" readonly id="aacThisWeek" th:value="${aacStatistics[2]}">
+            <input type="hidden" readonly id="aacThisMonth" th:value="${aacStatistics[3]}">
+            <input type="hidden" readonly id="aacLast3Month" th:value="${aacStatistics[4]}">
+            <input type="hidden" readonly id="aacLast6Month" th:value="${aacStatistics[5]}">
+            <input type="hidden" readonly id="aacLast9Month" th:value="${aacStatistics[6]}">
+            <input type="hidden" readonly id="aacThisYear" th:value="${aacStatistics[7]}">
+
+            <span class="count" id="aaConvNumber" th:text="${aacStatistics[0]}"></span>
+          </h4>
+          <br>
+          <p class="text-light">Conversations with Admin</p>
+
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-flat-color-3">
+        <div class="card-body pb-0">
+          <div class="dropdown float-right">
+            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown">
+              <i class="fa fa-cog"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu-content">
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'ticketsLabel', 'tTotal', 'ticketsNumber')"
+                   style="cursor: pointer;">Total</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'ticketsLabel', 'tOpened', 'ticketsNumber')"
+                   style="cursor: pointer;">Opened Tickets</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'ticketsLabel', 'tAssigned', 'ticketsNumber')"
+                   style="cursor: pointer;">Assigned Tickets</a>
+                <a class="dropdown-item"
+                   onclick="showStatistics(this.innerHTML, 'ticketsLabel', 'tClosed', 'ticketsNumber')"
+                   style="cursor: pointer;">Closed Tickets</a>
+              </div>
+            </div>
+          </div>
+          <h4 id="ticketsLabel">Total:</h4>
+          <h4 class="mb-0">
+
+            <input type="hidden" readonly id="tTotal" th:value="${tStatistics[0]}">
+            <input type="hidden" readonly id="tOpened" th:value="${tStatistics[1]}">
+            <input type="hidden" readonly id="tAssigned" th:value="${tStatistics[2]}">
+            <input type="hidden" readonly id="tClosed" th:value="${tStatistics[3]}">
+
+            <span class="count" id="ticketsNumber" th:text="${tStatistics[0]}"></span>
+          </h4>
+          <br>
+          <p class="text-light">Tickets</p>
+
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div th:switch="${user.getUserRole()}" th:case="'ADMIN'" class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-flat-color-4">
+        <div class="card-body pb-0">
+          <div class="dropdown float-right">
+            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown">
+              <i class="fa fa-cog"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu-content">
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'usersLabel', 'uAll', 'usersNumber')" style="cursor: pointer;">Total</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'usersLabel', 'uAdmins', 'usersNumber')" style="cursor: pointer;">Admins</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'usersLabel', 'uAgents', 'usersNumber')" style="cursor: pointer;">Agents</a>
+              </div>
+            </div>
+          </div>
+          <h4 id="usersLabel">Total:</h4>
+          <h4 class="mb-0">
+
+            <input type="hidden" readonly id="uAll" th:value="${uStatistics[0]}">
+            <input type="hidden" readonly id="uAgents" th:value="${uStatistics[1]}">
+            <input type="hidden" readonly id="uAdmins" th:value="${uStatistics[2]}">
+
+            <span class="count" id="usersNumber" th:text="${uStatistics[0]}"></span>
+          </h4>
+          <br>
+          <p class="text-light">Users</p>
+
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div class="col-lg-12" id="pieChartDiv">
+      <div class="card">
+        <input type="hidden" id="accepted" name="accepted" th:value="${accepted}">
+        <input type="hidden" id="ignored" name="ignored" th:value="${ignored}">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-5">
+              <h4 style="line-height: 38px;">Conversations with Customer</h4>
+            </div>
+            <div class="col-sm-7">
+              <form>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                  <input type="text" readonly id="accDates" name="accDates" class="form-control">
+                </div>
+              </form>
+            </div>
+          </div>
+          <canvas id="pieChartACC"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <table id="bootstrap-data-table" class="table table-striped table-bordered">
+            <thead>
+            <tr th:switch="${user.getUserRole()}">
+              <th><i class="fa fa-user"></i> Customer Name</th>
+              <th><i class="fa fa-id-badge"></i> Customer ID</th>
+              <th><i class="fa fa-clock-o"></i> Duration</th>
+              <th><i class="fa fa-check"></i> Status</th>
+              <th th:case="'ADMIN'"><i class="fa fa-user"></i> Agent Name</th>
+              <th><i class="fa fa-id-badge"></i> Conversation ID</th>
+              <th><i class="fa fa-calendar"></i> Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="conversation: ${conversations}">
+              <tr th:switch="${user.getUserRole()}">
+                <td th:text="${conversation.getCustomerName()}"></td>
+                <td th:text="${conversation.getCustomerID()}"></td>
+                <td th:text="${conversation.getDuration() / 60 + ' min ' + conversation.getDuration() % 60 + ' sec'}"></td>
+                <td th:switch="${conversation.getConversationStatus()}">
+                  <span th:case="'ACCEPTED'" class="badge badge-success">ACCEPTED</span>
+                  <span th:case="'IGNORED'" class="badge badge-danger">IGNORED</span>
+                  <span th:case="'CREATED'" class="badge badge-warning">CREATED</span>
+                </td>
+                <td th:case="'ADMIN'" th:text="${conversation.getUser().getUserFirstname() + ' ' + conversation.getUser().getUserLastname()}"></td>
+                <td th:text="${conversation.getConversationID()}"></td>
+                <td th:text="${conversation.getConversationDate()}"></td>
+              </tr>
+            </th:block>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- .content -->
+</div><!-- /#right-panel -->
+
+<input type="hidden" id="userID" name="userID" readonly th:value="${user.getUserID()}">
+<input type="hidden" id="userRole" name="userRole" readonly th:value="${user.getUserRole()}">
+<input type="hidden" id="userName" name="userName" readonly th:value="${user.getUserFirstname() + ' ' + user.getUserLastname()}">
+
+<!-- Right Panel -->
+</body>
+<script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
+<script src="/js/app.js"></script>
+
+<script>
+  var userID = document.getElementById('userrID');
+  var userRole = document.getElementById('userRole');
+  var userName = document.getElementById('userName');
+
+  if(userRole.value === 'AGENT')
+  {
+    stompClient.connect({}, function(frame)
+    {
+      console.log('Connected: ' + frame);
+      stompClient.subscribe('/agent/' + userID.value + '/message', function(theMessage)
+      {
+        if(JSON.parse(theMessage.body).content === 'CONV_REQUEST')
+          showConvRequest(theMessage);
+        else if(JSON.parse(theMessage.body).content === 'CONV_CANCELLED')
+          deleteConvRequest();
+        else if(JSON.parse(theMessage.body).content === 'The customer has been disconnected.')
+          setTimeout(function()
+          {
+            location.reload();
+          }, 3000);
+      });
+    });
+
+    var statusLabel = document.getElementById('statusLabel');
+
+    if(statusLabel.innerHTML === 'AVAILABLE')
+    {
+      document.getElementById('setAvailable').disabled = true;
+      document.getElementById('setBusy').disabled = false;
+      statusLabel.className = 'text-success';
+    }
+    else
+    {
+      document.getElementById('setBusy').disabled = true;
+      document.getElementById('setAvailable').disabled = false;
+      statusLabel.className = 'text-danger';
+    }
+
+    var pieChartDiv = document.getElementById('pieChartDiv');
+    pieChartDiv.classList.remove('col-lg-12');
+    pieChartDiv.classList.add('col-lg-9');
+  }
+</script>
+
+<script src="/assets/js/lib/data-table/datatables.min.js"></script>
+<script src="/assets/js/lib/data-table/dataTables.bootstrap.min.js"></script>
+<script src="/assets/js/lib/data-table/datatables-init.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function()
+  {
+    $('#bootstrap-data-table-export').DataTable();
+  });
+</script>
+
+<script src="/assets/js/vendor/jquery-2.1.4.min.js"></script>
+<script src="/assets/js/lib/chart-js/Chart.bundle.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<script>
+  $(function()
+  {
+    $('input[name="accDates"]').daterangepicker({
+      startDate: moment().startOf('day'),
+      endDate: moment().startOf('day').add(6, 'day'),
+      locale: {
+        format: 'DD/MM/YYYY'
+      }
+    });
+  });
+
+  $('input[name="accDates"]').on('apply.daterangepicker', function(ev, picker)
+  {
+    if(userRole.value === 'AGENT')
+    {
+      var startDate = picker.startDate.format('YYYY-MM-DDTHH:mm');
+      var endDate = picker.endDate.format('YYYY-MM-DDTHH:mm');
+      var userID = document.getElementById('userID').value;
+      var forStatistics = "FOR_ACC";
+      var json = 'userID=' + userID + '&forStatistics=' + forStatistics + '&startDate=' + startDate + '&endDate=' + endDate;
+      $.ajax({
+        type: 'POST',
+        url: '/agent/statistics/conversations-with-customer',
+        data: json,
+        success: function(r)
+        {
+          pieACC.data.datasets[0].data[0] = r.accepted;
+          pieACC.data.datasets[0].data[1] = r.ignored;
+          pieACC.update();
+        },
+        error: function(r)
+        {
+          console.log('ERROR! >>> ' + r);
+        }
+      });
+    }
+    else
+    {
+      var startDate = picker.startDate.format('YYYY-MM-DDTHH:mm');
+      var endDate = picker.endDate.format('YYYY-MM-DDTHH:mm');
+      var forStatistics = "FOR_ACC";
+      var json = 'forStatistics=' + forStatistics + '&startDate=' + startDate + '&endDate=' + endDate;
+      $.ajax({
+        type: 'POST',
+        url: '/admin/statistics/conversations-with-customer',
+        data: json,
+        success: function(r)
+        {
+          pieACC.data.datasets[0].data[0] = r.accepted;
+          pieACC.data.datasets[0].data[1] = r.ignored;
+          pieACC.update();
+        },
+        error: function(r)
+        {
+          console.log('ERROR! >>> ' + r);
+        }
+      });
+    }
+  });
+</script>
+
+<script src="/assets/js/dashboard.js"></script>
+<script src="/assets/js/widgets.js"></script>
+
+<script>
+  var pieACC;
+  (function($)
+  {
+    "use strict";
+
+    //pie chart
+    var ctx1 = document.getElementById("pieChartACC");
+    var accepted = document.getElementById('accepted').value;
+    var ignored = document.getElementById('ignored').value;
+    ctx1.height = 100;
+    pieACC = new Chart(ctx1, {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [accepted, ignored],
+          backgroundColor: [
+            "rgba(0, 123, 255, 0.5)",
+            "rgba(255, 0, 0, 0.3)",
+          ],
+          hoverBackgroundColor: [
+            "rgba(0, 123, 255, 0.5)",
+            "rgba(255, 0, 0, 0.3)",
+          ]
+
+        }],
+        labels: [
+          "Accepted",
+          "Ignored",
+        ]
+      },
+      options: {
+        responsive: true
+      }
+    });
+  })(jQuery);
+</script>
+</html>

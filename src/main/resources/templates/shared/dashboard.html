@@ -1,0 +1,616 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Dashboard</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/themify-icons.css">
+  <link rel="stylesheet" href="/assets/css/flag-icon.min.css">
+  <link rel="stylesheet" href="/assets/css/cs-skin-elastic.css">
+  <!-- <link rel="stylesheet" href="assets/css/bootstrap-select.less"> -->
+  <link rel="stylesheet" href="/assets/scss/style.css">
+  <link href="/css/main.css" rel="stylesheet">
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+</head>
+<body>
+<!-- Left Panel -->
+
+<aside th:replace="shared/navbar"></aside>
+
+<!-- Left Panel -->
+
+<!-- Right Panel -->
+
+<div id="right-panel" class="right-panel">
+
+  <!-- Header-->
+  <header th:replace="shared/header"></header>
+  <!-- Header-->
+
+  <div class="breadcrumbs">
+    <div class="col-sm-4">
+      <div class="page-header float-left">
+        <div class="page-title">
+          <h1>Dashboard</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content mt-3">
+
+    <div id="conversationAlert"></div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-flat-color-1">
+        <div class="card-body pb-0">
+          <div class="dropdown float-right">
+            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+              <i class="fa fa-cog"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu-content">
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accTotal', 'acConvNumber')" style="cursor: pointer;">Total</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accToday', 'acConvNumber')" style="cursor: pointer;">Today</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accThisWeek', 'acConvNumber')" style="cursor: pointer;">This Week</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accThisMonth', 'acConvNumber')" style="cursor: pointer;">This Month</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accLast3Month', 'acConvNumber')" style="cursor: pointer;">Last 3 Months</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accLast6Month', 'acConvNumber')" style="cursor: pointer;">Last 6 Months</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accLast9Month', 'acConvNumber')" style="cursor: pointer;">Last 9 Months</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'acConvLabel', 'accThisYear', 'acConvNumber')" style="cursor: pointer;">This Year</a>
+              </div>
+            </div>
+          </div>
+          <h4 id="acConvLabel">Total:</h4>
+          <h4 class="mb-0">
+
+            <input type="hidden" readonly id="accTotal" th:value="${accStatistics[0]}">
+            <input type="hidden" readonly id="accToday" th:value="${accStatistics[1]}">
+            <input type="hidden" readonly id="accThisWeek" th:value="${accStatistics[2]}">
+            <input type="hidden" readonly id="accThisMonth" th:value="${accStatistics[3]}">
+            <input type="hidden" readonly id="accLast3Month" th:value="${accStatistics[4]}">
+            <input type="hidden" readonly id="accLast6Month" th:value="${accStatistics[5]}">
+            <input type="hidden" readonly id="accLast9Month" th:value="${accStatistics[6]}">
+            <input type="hidden" readonly id="accThisYear" th:value="${accStatistics[7]}">
+
+            <span class="count" id="acConvNumber" th:text="${accStatistics[0]}"></span>
+          </h4>
+          <br>
+          <p class="text-light">Agent - Customer Conversations</p>
+
+        </div>
+
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-flat-color-2">
+        <div class="card-body pb-0">
+          <div class="dropdown float-right">
+            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown">
+              <i class="fa fa-cog"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu-content">
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacTotal', 'aaConvNumber')" style="cursor: pointer;">Total</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacToday', 'aaConvNumber')" style="cursor: pointer;">Today</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacThisWeek', 'aaConvNumber')" style="cursor: pointer;">This Week</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacThisMonth', 'aaConvNumber')" style="cursor: pointer;">This Month</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacLast3Month', 'aaConvNumber')" style="cursor: pointer;">Last 3 Months</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacLast6Month', 'aaConvNumber')" style="cursor: pointer;">Last 6 Months</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacLast9Month', 'aaConvNumber')" style="cursor: pointer;">Last 9 Months</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'aaConvLabel', 'aacThisYear', 'aaConvNumber')" style="cursor: pointer;">This Year</a>
+              </div>
+            </div>
+          </div>
+          <h4 id="aaConvLabel">Total:</h4>
+          <h4 class="mb-0">
+
+            <input type="hidden" readonly id="aacTotal" th:value="${aacStatistics[0]}">
+            <input type="hidden" readonly id="aacToday" th:value="${aacStatistics[1]}">
+            <input type="hidden" readonly id="aacThisWeek" th:value="${aacStatistics[2]}">
+            <input type="hidden" readonly id="aacThisMonth" th:value="${aacStatistics[3]}">
+            <input type="hidden" readonly id="aacLast3Month" th:value="${aacStatistics[4]}">
+            <input type="hidden" readonly id="aacLast6Month" th:value="${aacStatistics[5]}">
+            <input type="hidden" readonly id="aacLast9Month" th:value="${aacStatistics[6]}">
+            <input type="hidden" readonly id="aacThisYear" th:value="${aacStatistics[7]}">
+
+            <span class="count" id="aaConvNumber" th:text="${aacStatistics[0]}"></span>
+          </h4>
+          <br>
+          <p class="text-light">Agent - Admin Conversations</p>
+
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-flat-color-3">
+        <div class="card-body pb-0">
+          <div class="dropdown float-right">
+            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown">
+              <i class="fa fa-cog"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu-content">
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'ticketsLabel', 'tTotal', 'ticketsNumber')" style="cursor: pointer;">Total</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'ticketsLabel', 'tOpened', 'ticketsNumber')" style="cursor: pointer;">Opened Tickets</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'ticketsLabel', 'tAssigned', 'ticketsNumber')" style="cursor: pointer;">Assigned Tickets</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'ticketsLabel', 'tClosed', 'ticketsNumber')" style="cursor: pointer;">Closed Tickets</a>
+              </div>
+            </div>
+          </div>
+          <h4 id="ticketsLabel">Total:</h4>
+          <h4 class="mb-0">
+
+            <input type="hidden" readonly id="tTotal" th:value="${tStatistics[0]}">
+            <input type="hidden" readonly id="tOpened" th:value="${tStatistics[1]}">
+            <input type="hidden" readonly id="tAssigned" th:value="${tStatistics[2]}">
+            <input type="hidden" readonly id="tClosed" th:value="${tStatistics[3]}">
+
+            <span class="count" id="ticketsNumber" th:text="${tStatistics[0]}"></span>
+          </h4>
+          <br>
+          <p class="text-light">Tickets</p>
+
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-flat-color-4">
+        <div class="card-body pb-0">
+          <div class="dropdown float-right">
+            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown">
+              <i class="fa fa-cog"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu-content">
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'usersLabel', 'uAll', 'usersNumber')" style="cursor: pointer;">Total</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'usersLabel', 'uAdmins', 'usersNumber')" style="cursor: pointer;">Admins</a>
+                <a class="dropdown-item" onclick="showStatistics(this.innerHTML, 'usersLabel', 'uAgents', 'usersNumber')" style="cursor: pointer;">Agents</a>
+              </div>
+            </div>
+          </div>
+          <h4 id="usersLabel">Total:</h4>
+          <h4 class="mb-0">
+
+            <input type="hidden" readonly id="uAll" th:value="${uStatistics[0]}">
+            <input type="hidden" readonly id="uAgents" th:value="${uStatistics[1]}">
+            <input type="hidden" readonly id="uAdmins" th:value="${uStatistics[2]}">
+
+            <span class="count" id="usersNumber" th:text="${uStatistics[0]}"></span>
+          </h4>
+          <br>
+          <p class="text-light">Users</p>
+
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div class="col-lg-9">
+      <div class="card">
+
+        <input type="hidden" id="accMondayA" readonly th:value="${accDaysA[0]}">
+        <input type="hidden" id="accTuesdayA" readonly th:value="${accDaysA[1]}">
+        <input type="hidden" id="accWednesdayA" readonly th:value="${accDaysA[2]}">
+        <input type="hidden" id="accThursdayA" readonly th:value="${accDaysA[3]}">
+        <input type="hidden" id="accFridayA" readonly th:value="${accDaysA[4]}">
+        <input type="hidden" id="accSaturdayA" readonly th:value="${accDaysA[5]}">
+        <input type="hidden" id="accSundayA" readonly th:value="${accDaysA[6]}">
+
+        <input type="hidden" id="accMondayI" readonly th:value="${accDaysI[0]}">
+        <input type="hidden" id="accTuesdayI" readonly th:value="${accDaysI[1]}">
+        <input type="hidden" id="accWednesdayI" readonly th:value="${accDaysI[2]}">
+        <input type="hidden" id="accThursdayI" readonly th:value="${accDaysI[3]}">
+        <input type="hidden" id="accFridayI" readonly th:value="${accDaysI[4]}">
+        <input type="hidden" id="accSaturdayI" readonly th:value="${accDaysI[5]}">
+        <input type="hidden" id="accSundayI" readonly th:value="${accDaysI[6]}">
+
+        <div class="card-body">
+          <h4 class="mb-3">Agent - Customer Conversations</h4>
+          <canvas id="barChartACC"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+
+        <input type="hidden" id="aacMonday" readonly th:value="${aacDays[0]}">
+        <input type="hidden" id="aacTuesday" readonly th:value="${aacDays[1]}">
+        <input type="hidden" id="aacWednesday" readonly th:value="${aacDays[2]}">
+        <input type="hidden" id="aacThursday" readonly th:value="${aacDays[3]}">
+        <input type="hidden" id="aacFriday" readonly th:value="${aacDays[4]}">
+        <input type="hidden" id="aacSaturday" readonly th:value="${aacDays[5]}">
+        <input type="hidden" id="aacSunday" readonly th:value="${aacDays[6]}">
+
+        <div class="card-body">
+          <h4 class="mb-3">Agent - Admin Conversations</h4>
+          <canvas id="barChartAAC"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+
+        <input type="hidden" id="tMondayO" readonly th:value="${tDaysO[0]}">
+        <input type="hidden" id="tTuesdayO" readonly th:value="${tDaysO[1]}">
+        <input type="hidden" id="tWednesdayO" readonly th:value="${tDaysO[2]}">
+        <input type="hidden" id="tThursdayO" readonly th:value="${tDaysO[3]}">
+        <input type="hidden" id="tFridayO" readonly th:value="${tDaysO[4]}">
+        <input type="hidden" id="tSaturdayO" readonly th:value="${tDaysO[5]}">
+        <input type="hidden" id="tSundayO" readonly th:value="${tDaysO[6]}">
+
+        <input type="hidden" id="tMondayA" readonly th:value="${tDaysA[0]}">
+        <input type="hidden" id="tTuesdayA" readonly th:value="${tDaysA[1]}">
+        <input type="hidden" id="tWednesdayA" readonly th:value="${tDaysA[2]}">
+        <input type="hidden" id="tThursdayA" readonly th:value="${tDaysA[3]}">
+        <input type="hidden" id="tFridayA" readonly th:value="${tDaysA[4]}">
+        <input type="hidden" id="tSaturdayA" readonly th:value="${tDaysA[5]}">
+        <input type="hidden" id="tSundayA" readonly th:value="${tDaysA[6]}">
+
+        <input type="hidden" id="tMondayC" readonly th:value="${tDaysC[0]}">
+        <input type="hidden" id="tTuesdayC" readonly th:value="${tDaysC[1]}">
+        <input type="hidden" id="tWednesdayC" readonly th:value="${tDaysC[2]}">
+        <input type="hidden" id="tThursdayC" readonly th:value="${tDaysC[3]}">
+        <input type="hidden" id="tFridayC" readonly th:value="${tDaysC[4]}">
+        <input type="hidden" id="tSaturdayC" readonly th:value="${tDaysC[5]}">
+        <input type="hidden" id="tSundayC" readonly th:value="${tDaysC[6]}">
+
+        <div class="card-body">
+          <h4 class="mb-3">Tickets</h4>
+          <canvas id="barChartT"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-lg-6">
+      <section class="card">
+        <div class="twt-feed blue-bg">
+
+          <div class="media">
+            <img class="align-self-center rounded-circle mr-3" th:src="${user.getProfilePicture()}" style="width:85px; height:85px;" alt="User Profile Picture">
+            <div class="media-body">
+              <h4 class="text-white" style="line-height: 61px;" th:text="${user.getUserFirstname() + ' ' + user.getUserLastname()}"></h4>
+              <p class="text-light"><i th:text="${user.getUserRole()}"></i></p>
+            </div>
+          </div>
+        </div>
+        <div th:switch="${user.getUserRole()}" class="weather-category">
+          <a th:href="'/' + ${user.getUserRole().toLowerCase().replace('ı', 'i')} + '/ticket/active'" class="dropdown-item">Active Tickets<b th:text="${activeTickets.size()}" class="float-right count"></b></a>
+          <a th:case="'ADMIN'" href="/admin/ticket/closed" class="dropdown-item">Closed Tickets<b th:text="${closedTickets.size()}" class="float-right count"></b></a>
+          <a th:href="'/' + ${user.getUserRole().toLowerCase().replace('ı', 'i')} + '/message/all'" class="dropdown-item">Messages<b th:text="${allMessages.size()}" class="float-right count"></b></a>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-xl-3 col-lg-6">
+      <section class="card">
+        <div style="margin: 20px;">
+          <div class="h1 text-muted text-right mb-4">
+            <i class="fa fa-users"></i>
+          </div>
+
+          <div class="h4 mb-0">Agents</div>
+
+          <small class="text-muted text-uppercase font-weight-bold">Online</small>
+          <div class="progress progress-xs mt-3 mb-0 bg-flat-color-5" style="width: 40%; height: 5px;"></div>
+        </div>
+        <div class="weather-category">
+          <th:block th:each="onlineAgent: ${onlineAgents}">
+            <a th:href="'/admin/user/detail/' + ${onlineAgent.getUserID()}" class="dropdown-item">
+              <div class="row">
+                <div class="col-4">
+                  <img th:src="${onlineAgent.getProfilePicture()}" class="align-self-center rounded-circle mr-3" style="width:55px; height:55px;" alt="User Profile Picture">
+                </div>
+                <div class="col-8">
+                  <div class="row">
+                    <b th:text="${onlineAgent.getUserFirstname() + ' ' + onlineAgent.getUserLastname()}"></b>
+                  </div>
+                  <div class="row" th:switch="${onlineAgent.getUserStatus()}">
+                    <span th:case="'AVAILABLE'" class="badge badge-success">Available</span>
+                    <span th:case="'BUSY'" class="badge badge-danger">Busy</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </th:block>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-xl-3 col-lg-6">
+      <section class="card">
+        <div style="margin: 20px;">
+          <div class="h1 text-muted text-right mb-4">
+            <i class="fa fa-users"></i>
+          </div>
+
+          <div class="h4 mb-0">Admins</div>
+
+          <small class="text-muted text-uppercase font-weight-bold">Online</small>
+          <div class="progress progress-xs mt-3 mb-0 bg-flat-color-5" style="width: 40%; height: 5px;"></div>
+        </div>
+        <div class="weather-category">
+          <th:block th:each="onlineAdmin: ${onlineAdmins}">
+            <a th:href="'/admin/user/detail/' + ${onlineAdmin.getUserID()}" class="dropdown-item">
+              <div class="row">
+                <div class="col-4">
+                  <img th:src="${onlineAdmin.getProfilePicture()}" class="align-self-center rounded-circle mr-3" style="width:55px; height:55px;" alt="User Profile Picture">
+                </div>
+                <div class="col-8">
+                  <div class="row">
+                    <b th:text="${onlineAdmin.getUserFirstname() + ' ' + onlineAdmin.getUserLastname()}"></b>
+                  </div>
+                  <div class="row" th:switch="${onlineAdmin.getUserStatus()}">
+                    <span th:case="'AVAILABLE'" class="badge badge-success">Available</span>
+                    <span th:case="'BUSY'" class="badge badge-danger">Busy</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </th:block>
+        </div>
+      </section>
+    </div>
+
+  </div> <!-- .content -->
+</div><!-- /#right-panel -->
+
+<input type="hidden" id="userID" name="userID" readonly th:value="${user.getUserID()}">
+<input type="hidden" id="userRole" name="userRole" readonly th:value="${user.getUserRole()}">
+<input type="hidden" id="userName" name="userName" readonly th:value="${user.getUserFirstname() + ' ' + user.getUserLastname()}">
+<!-- Right Panel -->
+</body>
+<script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
+<script src="/js/app.js"></script>
+
+<script>
+  var userID = document.getElementById('userID');
+  var userRole = document.getElementById('userRole');
+  var userName = document.getElementById('userName');
+
+  if(userRole.value === 'AGENT')
+  {
+    stompClient.connect({}, function(frame)
+    {
+      console.log('Connected: ' + frame);
+      stompClient.subscribe('/agent/' + userID.value + '/message', function(theMessage)
+      {
+        if(JSON.parse(theMessage.body).content === 'CONV_REQUEST')
+          showConvRequest(theMessage);
+        else if(JSON.parse(theMessage.body).content === 'CONV_CANCELLED')
+          deleteConvRequest();
+        else if(JSON.parse(theMessage.body).content === 'The customer has been disconnected.')
+          setTimeout(function()
+          {
+            location.reload();
+          }, 3000);
+      });
+    });
+
+    var statusLabel = document.getElementById('statusLabel');
+
+    if(statusLabel.innerHTML === 'AVAILABLE')
+    {
+      document.getElementById('setAvailable').disabled = true;
+      document.getElementById('setBusy').disabled = false;
+      statusLabel.className = 'text-success';
+    }
+    else
+    {
+      document.getElementById('setBusy').disabled = true;
+      document.getElementById('setAvailable').disabled = false;
+      statusLabel.className = 'text-danger';
+    }
+  }
+</script>
+
+<script src="/assets/js/vendor/jquery-2.1.4.min.js"></script>
+<script src="/assets/js/lib/chart-js/Chart.bundle.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+<script src="/assets/js/dashboard.js"></script>
+<script src="/assets/js/widgets.js"></script>
+
+<script>
+  var barAAC;
+  var barACC;
+  var barT;
+  (function($)
+  {
+    "use strict";
+
+    //bar chart
+    var ctx1 = document.getElementById("barChartACC");
+
+    var daysA = [
+      document.getElementById('accMondayA').value,
+      document.getElementById('accTuesdayA').value,
+      document.getElementById('accWednesdayA').value,
+      document.getElementById('accThursdayA').value,
+      document.getElementById('accFridayA').value,
+      document.getElementById('accSaturdayA').value,
+      document.getElementById('accSundayA').value
+    ];
+    var daysI = [
+      document.getElementById('accMondayI').value,
+      document.getElementById('accTuesdayI').value,
+      document.getElementById('accWednesdayI').value,
+      document.getElementById('accThursdayI').value,
+      document.getElementById('accFridayI').value,
+      document.getElementById('accSaturdayI').value,
+      document.getElementById('accSundayI').value
+    ];
+
+    //    ctx.height = 200;
+    barACC = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        datasets: [
+          {
+            label: "Accepted by Agent",
+            data: [daysA[0], daysA[1], daysA[2], daysA[3], daysA[4], daysA[5], daysA[6]],
+            borderColor: "rgba(0, 123, 255, 0.9)",
+            borderWidth: "0",
+            backgroundColor: "rgba(0, 123, 255, 0.5)"
+          },
+          {
+            label: "Ignored by Agent",
+            data: [daysI[0], daysI[1], daysI[2], daysI[3], daysI[4], daysI[5], daysI[6]],
+            borderColor: "rgba(255, 0, 0, 0.5)",
+            borderWidth: "0",
+            backgroundColor: "rgba(255, 0, 0, 0.3)"
+          }
+        ]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+    //bar chart
+    var ctx2 = document.getElementById("barChartAAC");
+
+    var days = [
+      document.getElementById('aacMonday').value,
+      document.getElementById('aacTuesday').value,
+      document.getElementById('aacWednesday').value,
+      document.getElementById('aacThursday').value,
+      document.getElementById('aacFriday').value,
+      document.getElementById('aacSaturday').value,
+      document.getElementById('aacSunday').value
+    ];
+
+    //    ctx.height = 200;
+    barAAC = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        datasets: [
+          {
+            label: "Sent Messages",
+            data: [days[0], days[1], days[2], days[3], days[4], days[5], days[6]],
+            borderColor: "rgba(0, 123, 255, 0.9)",
+            borderWidth: "0",
+            backgroundColor: "rgba(0, 123, 255, 0.5)"
+          }
+        ]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+    //bar chart
+    var ctx3 = document.getElementById("barChartT");
+
+    var daysO = [
+      document.getElementById('tMondayO').value,
+      document.getElementById('tTuesdayO').value,
+      document.getElementById('tWednesdayO').value,
+      document.getElementById('tThursdayO').value,
+      document.getElementById('tFridayO').value,
+      document.getElementById('tSaturdayO').value,
+      document.getElementById('tSundayO').value
+    ];
+    var daysA = [
+      document.getElementById('tMondayA').value,
+      document.getElementById('tTuesdayA').value,
+      document.getElementById('tWednesdayA').value,
+      document.getElementById('tThursdayA').value,
+      document.getElementById('tFridayA').value,
+      document.getElementById('tSaturdayA').value,
+      document.getElementById('tSundayA').value
+    ];
+    var daysC = [
+      document.getElementById('tMondayC').value,
+      document.getElementById('tTuesdayC').value,
+      document.getElementById('tWednesdayC').value,
+      document.getElementById('tThursdayC').value,
+      document.getElementById('tFridayC').value,
+      document.getElementById('tSaturdayC').value,
+      document.getElementById('tSundayC').value
+    ];
+
+    //    ctx.height = 200;
+    barT = new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        datasets: [
+          {
+            label: "Opened Tickets",
+            data: [daysO[0], daysO[1], daysO[2], daysO[3], daysO[4], daysO[5], daysO[6]],
+            borderColor: "rgba(255, 0, 0, 0.5)",
+            borderWidth: "0",
+            backgroundColor: "rgba(255, 0, 0, 0.3)"
+          },
+          {
+            label: "Assigned Tickets",
+            data: [daysA[0], daysA[1], daysA[2], daysA[3], daysA[4], daysA[5], daysA[6]],
+            borderColor: "rgba(255, 255, 0, 0.9)",
+            borderWidth: "0",
+            backgroundColor: "rgba(255, 255, 0, 0.5)"
+          },
+          {
+            label: "Closed Tickets",
+            data: [daysC[0], daysC[1], daysC[2], daysC[3], daysC[4], daysC[5], daysC[6]],
+            borderColor: "rgba(0, 255, 0, 0.9)",
+            borderWidth: "0",
+            backgroundColor: "rgba(0, 255, 0, 0.5)"
+          }
+        ]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+  })(jQuery);
+</script>
+</html>
