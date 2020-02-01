@@ -34,24 +34,7 @@ public class MessageWebsocketApplication
 {
   public static void main(String[] args)
   {
-    try
-    {
-      // Create SpringBoot application
-      SpringApplication app = new SpringApplication(MessageWebsocketApplication.class);
-
-      // Get machine IP address and overwrite to the application.properties file
-      Properties prop = new Properties();
-      prop.put("server.address", InetAddress.getLocalHost().getHostAddress());
-
-      // Set the application properties file and run the application
-      app.setDefaultProperties(prop);
-      app.run(args);
-    }
-    // For InetAddress
-    catch(UnknownHostException e)
-    {
-      e.printStackTrace();
-    }
+    new SpringApplication(MessageWebsocketApplication.class).run(args);
   }
 
   /**
@@ -63,13 +46,6 @@ public class MessageWebsocketApplication
   CommandLineRunner runner(Environment environment, UserRepository userRepository)
   {
     return args -> {
-      // Print out the server's url and port
-      // IP and port are being taken from application.properties
-      System.out.println();
-      System.out.println("System access url from local network:");
-      System.out.println("http://" + environment.getProperty("server.address") + ":" + environment.getProperty("server.port"));
-      System.out.println();
-
       User user = userRepository.findByUsername("system");
 
       String defaultUserPassword = "system";
@@ -85,9 +61,13 @@ public class MessageWebsocketApplication
       }
 
       System.out.println();
+      System.out.println("=======================================================");
+      System.out.println("http://localhost:1995");
+      System.out.println();
       System.out.println("System default user with administrative privilege:");
       System.out.println("  - Username: " + user.getUsername());
       System.out.println("  - Password: " + defaultUserPassword);
+      System.out.println("=======================================================");
       System.out.println();
     };
   }
