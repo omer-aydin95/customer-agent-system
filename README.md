@@ -1,4 +1,8 @@
 # Customer Agent System
+
+![The project's screenshot.](ss/ss1.png)
+
+
 This project have been created by me while I was doing my second internship at [ODC Business Solutions](https://www.smartmessage.com/) to integrate with an existing [app](https://www.smartmessage.com/bot-builder/).
 
 This app's goal is to allow customers to talk with real customer agent rather than a bot. Normally the [app](https://www.smartmessage.com/bot-builder/) allows you to react out your customers and also allows your customers to reach out you by multiple channels. For example a customer can reach you via facebook messanger by talking to a bot.
